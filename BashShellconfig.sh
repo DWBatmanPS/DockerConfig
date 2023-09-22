@@ -55,6 +55,9 @@ sudo service docker restart
 export PERSIST_DATA_PATH="${HOME}/src/home-assistant-config"
 mkdir -p ${PERSIST_DATA_PATH}/data
 cd ${PERSIST_DATA_PATH}
+${EMAIL}="test@example.com"
+${DOMAIN}="example.com"
+${DOMAIN2}="example.com"
 
 ##Make Docker Compose Yaml 1 at this point Call this file docker-compose.yaml in the OS and place in ${HOME}/src/home-assistant-config"
 cd ${HOME}/src/home-assistant-config
@@ -76,15 +79,15 @@ nano docker-compose.yaml
 
 # set the letsencrypt email
 cd ${HOME}/src/home-assistant-config
-echo LETSENCRYPT_ACME_EMAIL=danielwheeler1@gmail.com >> .env
+echo LETSENCRYPT_ACME_EMAIL=${EMAIL}>> .env
 
 # set your internal domain (maybe something like pi.lan)
 cd ${HOME}/src/home-assistant-config
-echo INTERNAL_DOMAIN=danwheelerhome.net >> .env
+echo INTERNAL_DOMAIN=${DOMAIN} >> .env
 
 # set your external domain (maybe something like example.com)
 cd ${HOME}/src/home-assistant-config
-echo EXTERNAL_DOMAIN=danwheelerhome.net >> .env
+echo EXTERNAL_DOMAIN=${DOMAIN2} >> .env
 
 ##Build new environment.
 sudo docker-compose up -d
