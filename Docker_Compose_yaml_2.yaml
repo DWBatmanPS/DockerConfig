@@ -1,0 +1,74 @@
+# docker-compose.yml
+version: '3'
+
+services:
+    portainer:
+        container_name: portainer
+        image: portainer/portainer:1.24.0
+        restart: always
+        ports:
+            - 9000:9000
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer-data:/data
+        logging:
+            options:
+                max-size: 10m
+
+volumes:
+    portainer-data:
+        name: portainer-data
+        driver: local-persist
+        driver_opts:
+            mountpoint: "${PERSIST_DATA_PATH}/data/portainer-data"
+services:
+    #...
+
+    reverse-proxy:
+        container_name: reverse-proxy
+        # The official v2.2 Traefik docker image
+        image: traefik:v2.2
+        command:
+            - "--api.dashboard=true"
+            - "--entrypoints.web.address=:80"
+            - "--entrypoints.websecure.address=:443"
+            - "--providers.docker=true"
+            - "--providers.docker.exposedbydefault=false"
+            - "--providers.docker.network=traefik_proxy"
+            - "--certificatesresolvers.le=true"
+            - "--certificatesresolvers.le.acme.email=${LETSENCRYPT_ACME_EMAIL}"
+            - "--certificatesresolvers.le.acme.storage=/etc/traefik/ssl/acme.json"
+            - "--certificatesresolvers.le.acme.httpchallenge=true"
+            - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+        restart: always
+        networks:
+            - traefik_proxy
+        extra_hosts:
+            # this host, though not important now will allow traefik
+            # to address home assistant later.
+            - host.docker.internal:172.17.0.1 
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            # So that Traefik can listen to the Docker events
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.dashboard.rule=Host(`traefik.${INTERNAL_DOMAIN}`)"
+            - "traefik.http.routers.dashboard.entrypoints=web"
+            - "traefik.http.routers.dashboard.service=api@internal"
+        logging:
+            options:
+                max-size: 10m
+    
+    #...
+
+networks:
+    traefik_proxy:
+        name: traefik_proxy
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.24.0.0/16 # not so important what these are
+                  gateway: 172.24.0.1 # as long as they're unique on your system

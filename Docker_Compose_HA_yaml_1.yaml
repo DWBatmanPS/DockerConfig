@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+    homeassistant:
+        container_name: home-assistant
+        image: homeassistant/raspberrypi3-homeassistant:stable
+        volumes:
+            - homeassistant-config:/config
+            - /etc/localtime:/etc/localtime:ro
+            - /var/run/restartd_signal:/var/run/restartd_signal
+        restart: always
+        network_mode: host
+        environment:
+            TZ: US/Central
+        logging:
+            options:
+                max-size: 10m
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.ha-internal.rule=Host(`ha.${INTERNAL_DOMAIN}`)"
+            - "traefik.http.routers.ha-internal.entrypoints=web"
+            - "traefik.http.routers.ha-insecure.rule=Host(`ha.${EXTERNAL_DOMAIN}`)"
+            - "traefik.http.routers.ha-insecure.entrypoints=web"
+            - "traefik.http.routers.ha-insecure.middlewares=redirecthttps@file,riptp@file"
+            - "traefik.http.routers.ha.rule=Host(`ha.${EXTERNAL_DOMAIN}`)"
+            - "traefik.http.routers.ha.entrypoints=websecure"
+            #- "traefik.http.routers.ha.middlewares=riptp@file"
+            - "traefik.http.routers.ha.tls=true"
+            - "traefik.http.routers.ha.tls.certresolver=le"
+            - "traefik.http.services.ha.loadbalancer.server.port=8123"
+networks:
+    net:
+        name: homeassistantha
+    traefik_proxy:
+        external: true
+
+
+volumes:
+    homeassistant-config:
+        name: homeassistant-config
+        driver: local-persist
+        driver_opts:
+            mountpoint: "${PERSIST_DATA_PATH}/data/homeassistant-config"
