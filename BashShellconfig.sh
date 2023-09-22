@@ -61,10 +61,10 @@ ${DOMAIN2}="example.com"
 
 ##Make Docker Compose Yaml 1 at this point Call this file docker-compose.yaml in the OS and place in ${HOME}/src/home-assistant-config"
 cd ${HOME}/src/home-assistant-config
-nano docker-compose.yaml
+curl -o docker-compose.yaml https://raw.githubusercontent.com/DWBatmanPS/DockerConfig/main/Docker_Compose_yaml_1.yaml
 
 # Bring up our defined services and detach into the background
-sudo docker-compose up -d
+sudo docker-compose -f docker-compose.yaml up -d
 
 cd ${HOME}/src/home-assistant-config
 
@@ -75,7 +75,7 @@ echo PERSIST_DATA_PATH="${HOME}/src/home-assistant-config" > .env
 
 ##Update Docker Compose YAML to contents of Docker_Compose_yaml_2.yaml
 cd ${HOME}/src/home-assistant-config
-nano docker-compose.yaml
+curl -o docker-compose.yaml https://raw.githubusercontent.com/DWBatmanPS/DockerConfig/main/Docker_Compose_yaml_2.yaml
 
 # set the letsencrypt email
 cd ${HOME}/src/home-assistant-config
@@ -90,16 +90,26 @@ cd ${HOME}/src/home-assistant-config
 echo EXTERNAL_DOMAIN=${DOMAIN2} >> .env
 
 ##Build new environment.
-sudo docker-compose up -d
+sudo docker-compose -f docker-compose.yaml up -d
 
 ##Update Docker Compose YAML to contents of Docker_Compose_yaml_3.yaml
 cd ${HOME}/src/home-assistant-config
-nano docker-compose.yaml
+ncurl -o docker-compose.yaml https://raw.githubusercontent.com/DWBatmanPS/DockerConfig/main/Docker_Compose_yaml_3.yaml
 
 ##Build new environment.
-sudo docker-compose up -d
+sudo docker-compose -f docker-compose.yaml up -d
 
 ##Setup the file docker-compose-ha.yaml in the os and place in ${HOME}/src/home-assistant-config
 cd ${HOME}/src/home-assistant-config
-nano docker-compose-ha.yaml
+curl -o docker-compose-ha.yaml https://raw.githubusercontent.com/DWBatmanPS/DockerConfig/main/Docker_Compose_HA_yaml_1.yaml
+
+##Build new environment.
+sudo docker-compose -f docker-compose-ha.yaml up -d
+
+##Update Docker Compose Yaml to content of Docker_Compose_HA_yaml_4.yaml
+cd ${HOME}/src/home-assistant-config
+curl -o docker-compose.yaml https://raw.githubusercontent.com/DWBatmanPS/DockerConfig/main/Docker_Compose_HA_yaml_4.yaml
+
+##Build new environment.
+sudo docker-compose -f docker-compose.yaml up -d
 
