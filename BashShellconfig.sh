@@ -1,27 +1,27 @@
 ##Install Docker
 
-sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+sudo apt-get --assume-yes install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 
-echo "deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable" | sudo tee > /etc/apt/sources.list.d/docker.list 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+##echo "deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable" | sudo tee > /etc/apt/sources.list.d/docker.list 
+##curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo apt-get update -qq
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
-sudo docker ps
+##sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
+##sudo docker ps
 
 ## Run Hello Workd
 
-sudo docker run hello-world
+##sudo docker run hello-world
 
 ##Make Docker Volumes Sane
 
 # Might want to add this to your ~/.bashrc (optional)
-export GOPATH="${HOME}/src/go"
-export PATH="${GOPATH}/bin:${PATH}"
+##export GOPATH="${HOME}/src/go"
+##export PATH="${GOPATH}/bin:${PATH}"
 
 # Setup our build environment
-sudo apt-get install golang
-mkdir -p ${GOPATH}/bin
-curl https://glide.sh/get | sh
+##sudo apt-get install golang
+##mkdir -p ${GOPATH}/bin
+##curl https://glide.sh/get | sh
 
 ##Building Golang plugin for Docker Volumes
     # Fetch the local-persist source
