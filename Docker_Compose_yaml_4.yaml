@@ -5,7 +5,7 @@ services:
     reverse-proxy:
         container_name: reverse-proxy
         # The official v2.10 Traefik docker image
-        image: traefik:v2.10
+        image: traefik:latest
         command:
             #- "--log.level=DEBUG"
             - "--api.insecure=true"
@@ -56,7 +56,7 @@ services:
              mountpoint: "${PERSIST_DATA_PATH}/data/letsencrypt"
     portainer:
         container_name: portainer
-        image: portainer/portainer:1.24.0
+        image: portainer/portainer-ce:latest
         restart: always
         networks:
             - traefik_proxy

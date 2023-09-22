@@ -4,7 +4,7 @@ version: '3'
 services:
     portainer:
         container_name: portainer
-        image: portainer/portainer:1.24.0
+        image: portainer/portainer-ce:latest
         restart: always
         ports:
             - 9000:9000
@@ -26,8 +26,8 @@ services:
 
     reverse-proxy:
         container_name: reverse-proxy
-        # The official v2.2 Traefik docker image
-        image: traefik:v2.2
+        # The official latest Traefik docker image
+        image: traefik:latest
         command:
             - "--api.dashboard=true"
             - "--entrypoints.web.address=:80"
