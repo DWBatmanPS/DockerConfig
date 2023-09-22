@@ -57,6 +57,8 @@ mkdir -p ${PERSIST_DATA_PATH}/data
 cd ${PERSIST_DATA_PATH}
 
 ##Make Docker Compose Yaml 1 at this point Call this file docker-compose.yaml in the OS and place in ${HOME}/src/home-assistant-config"
+cd ${HOME}/src/home-assistant-config
+nano docker-compose.yaml
 
 # Bring up our defined services and detach into the background
 sudo docker-compose up -d
@@ -65,26 +67,36 @@ cd ${HOME}/src/home-assistant-config
 
 # Lets make a new file to store our environment configuration
 #   and add our data storage variable to the new file
+cd ${HOME}/src/home-assistant-config
 echo PERSIST_DATA_PATH="${HOME}/src/home-assistant-config" > .env
 
 ##Update Docker Compose YAML to contents of Docker_Compose_yaml_2.yaml
+cd ${HOME}/src/home-assistant-config
+nano docker-compose.yaml
 
 # set the letsencrypt email
+cd ${HOME}/src/home-assistant-config
 echo LETSENCRYPT_ACME_EMAIL=danielwheeler1@gmail.com >> .env
 
 # set your internal domain (maybe something like pi.lan)
+cd ${HOME}/src/home-assistant-config
 echo INTERNAL_DOMAIN=danwheelerhome.net >> .env
 
-# set your external domain (maybe something like pi.lan)
+# set your external domain (maybe something like example.com)
+cd ${HOME}/src/home-assistant-config
 echo EXTERNAL_DOMAIN=danwheelerhome.net >> .env
 
 ##Build new environment.
 sudo docker-compose up -d
 
 ##Update Docker Compose YAML to contents of Docker_Compose_yaml_3.yaml
+cd ${HOME}/src/home-assistant-config
+nano docker-compose.yaml
 
 ##Build new environment.
 sudo docker-compose up -d
 
 ##Setup the file docker-compose-ha.yaml in the os and place in ${HOME}/src/home-assistant-config
+cd ${HOME}/src/home-assistant-config
+nano docker-compose-ha.yaml
 
