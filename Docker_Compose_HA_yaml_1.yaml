@@ -17,17 +17,18 @@ services:
                 max-size: 10m
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.ha-internal.rule=Host(`ha.${INTERNAL_DOMAIN}`)"
-            - "traefik.http.routers.ha-internal.entrypoints=web"
-            - "traefik.http.routers.ha-insecure.rule=Host(`ha.${EXTERNAL_DOMAIN}`)"
-            - "traefik.http.routers.ha-insecure.entrypoints=web"
-            - "traefik.http.routers.ha-insecure.middlewares=redirecthttps@file,riptp@file"
-            - "traefik.http.routers.ha.rule=Host(`ha.${EXTERNAL_DOMAIN}`)"
-            - "traefik.http.routers.ha.entrypoints=websecure"
+            #- "traefik.http.routers.ha-internal.rule=Host(`ha.${INTERNAL_DOMAIN}`)"
+            #- "traefik.http.routers.ha-internal.entrypoints=web"
+            #- "traefik.http.routers.ha-insecure.rule=Host(`ha.${EXTERNAL_DOMAIN}`)"
+            $- "traefik.http.routers.ha-insecure.entrypoints=web"
+            #- "traefik.http.routers.ha-insecure.middlewares=redirecthttps@file,riptp@file"
+            -"traffic.http.routers.homeassistant.tls=true"
+            - "traefik.http.routers.homeassistant.rule=Host(`ha.${EXTERNAL_DOMAIN}`)"
+           # - "traefik.http.routers.ha.entrypoints=websecure"
             #- "traefik.http.routers.ha.middlewares=riptp@file"
-            - "traefik.http.routers.ha.tls=true"
-            - "traefik.http.routers.ha.tls.certresolver=le"
-            - "traefik.http.services.ha.loadbalancer.server.port=8123"
+            #- "traefik.http.routers.ha.tls=true"
+            - "traefik.http.routers.omeassistant.tls.certresolver=le"
+            - "traefik.http.services.homeassistant.loadbalancer.server.port=8123"
 networks:
     net:
         name: homeassistantha
