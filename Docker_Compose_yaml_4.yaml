@@ -89,8 +89,6 @@ networks:
 volumes:
     traefik-config:
         name: traefik-config
-        driver_opts:
-            mountpoint: "${PERSIST_DATA_PATH}/data/traefik-config"
     portainer-data:
         name: portainer-data
     letsencrypt:
