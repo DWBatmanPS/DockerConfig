@@ -1,8 +1,8 @@
 version: '3'
 
-services:
-  reverse-proxy:
-    container_name: reverse-proxy
+  services:
+    reverse-proxy:
+      container_name: reverse-proxy
         # The official v2.10 Traefik docker image
         image: traefik:latest
         command:
