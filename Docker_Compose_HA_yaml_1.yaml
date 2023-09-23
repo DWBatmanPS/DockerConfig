@@ -27,7 +27,7 @@ services:
            # - "traefik.http.routers.ha.entrypoints=websecure"
             #- "traefik.http.routers.ha.middlewares=riptp@file"
             #- "traefik.http.routers.ha.tls=true"
-            - "traefik.http.routers.omeassistant.tls.certresolver=le"
+            -  "traefik.http.routers.omeassistant.tls.certresolver=le"
             - "traefik.http.services.homeassistant.loadbalancer.server.port=8123"
 networks:
     net:
