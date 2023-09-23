@@ -38,5 +38,3 @@ networks:
 volumes:
     homeassistant-config:
         name: homeassistant-config
-        driver_opts:
-            mountpoint: "${PERSIST_DATA_PATH}/data/homeassistant-config"
