@@ -1,95 +1,97 @@
 version: '3'
 
-  services:
-    reverse-proxy:
-      container_name: reverse-proxy
-        # The official v2.10 Traefik docker image
-        image: traefik:latest
-        command:
-            #- "--log.level=DEBUG"
-            - "--api.insecure=true"
-            - "--global.sendanonymoususage=false"
-            - "--api.dashboard=true"
-            - "--entrypoints.web.address=:80"
-            - "--entrypoints.websecure.address=:443"
-            - "--providers.docker=true"
-            - "--providers.docker.exposedbydefault=false"
-            - "--providers.docker.network=traefik_proxy"
-            - "--certificatesresolvers.le=true"
-            - "--certificatesresolvers.le.acme.email=${LETSENCRYPT_ACME_EMAIL}"
-            - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
-            - "--certificatesresolvers.le.acme.httpchallenge=true"
-            - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
-        restart: always
-        environment:
-            ACME_EMAIL: "${LETSENCRYPT_ACME_EMAIL}"
-            ADDRESS: "192.168.1.11"
-            HA_DOMAIN_NAME: "${EXTERNAL_DOMAIN}"
-            LAN_DOMAIN_NAME: "${INTERNAL_DOMAIN}"
-        networks:
-            - traefik_proxy
-        extra_hosts:
-            # this host, though not important now will allow traefik
-            # to address home assistant later.
-            - host.docker.internal:172.17.0.1 
-        ports:
-            - 80:80
-            - 443:443
-        volumes:
-            # So that Traefik can listen to the Docker events
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - letsencrypt:/letsencrypt
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.dashboard.rule=Host(`traefik.${INTERNAL_DOMAIN}`)"
-            - "traefik.http.routers.dashboard.entrypoints=web"
-            - "traefik.http.routers.dashboard.service=api@internal"
-        logging:
-            options:
-                max-size: 10m
-        volumes:
-          letsencrypt:
-          name: letsencrypt
-    portainer:
-        container_name: portainer
-        image: portainer/portainer-ce:latest
-        restart: always
-        networks:
-            - traefik_proxy
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-            - portainer-data:/data
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.portainer.rule=Host(`portainer.${INTERNAL_DOMAIN}`)"
-            - "traefik.http.routers.portainer.entrypoints=web"
-            - "traefik.http.routers.portainer.service=portainer"
-            - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-        logging:
-            options:
-                max-size: 10m
-        volumes:
-          portainer-data:
-          name: portainer-data
-networks:
-    host_applications:
-        name: applications
-        driver: bridge
-        ipam:
-            config:
-                - subnet: 172.18.0.0/24
-                  gateway: 172.18.0.1
-    traefik_proxy:
-        name: traefik_proxy
-        driver: bridge
-        ipam:
-            config:
-                - subnet: 172.24.0.0/16 # not so important what these are
-                  gateway: 172.24.0.1 # as long as they're unique on your system
-volumes:
-    traefik-config:
-        name: traefik-config
-    portainer-data:
-        name: portainer-data
-    letsencrypt:
+services:
+  reverse-proxy:
+    container_name: reverse-proxy
+    # The official v2.10 Traefik docker image
+    image: traefik:latest
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--global.sendanonymoususage=false"
+      - "--api.dashboard=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik_proxy"
+      - "--certificatesresolvers.le=true"
+      - "--certificatesresolvers.le.acme.email=${LETSENCRYPT_ACME_EMAIL}"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+    restart: always
+    environment:
+      ACME_EMAIL: "${LETSENCRYPT_ACME_EMAIL}"
+      ADDRESS: "192.168.1.11"
+      HA_DOMAIN_NAME: "${EXTERNAL_DOMAIN}"
+      LAN_DOMAIN_NAME: "${INTERNAL_DOMAIN}"
+    networks:
+      - traefik_proxy
+    extra_hosts:
+      # this host, though not important now, will allow Traefik
+      # to address Home Assistant later.
+      - host.docker.internal:172.17.0.1
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:/letsencrypt
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.${INTERNAL_DOMAIN}`)"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+      - "traefik.http.routers.dashboard.service=api@internal"
+    logging:
+      options:
+        max-size: 10m
+    volumes:
+      letsencrypt:
         name: letsencrypt
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: always
+    networks:
+      - traefik_proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.${INTERNAL_DOMAIN}`)"
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.service=portainer"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    logging:
+      options:
+        max-size: 10m
+    volumes:
+      portainer-data:
+        name: portainer-data
+
+networks:
+  host_applications:
+    name: applications
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+          gateway: 172.18.0.1
+  traefik_proxy:
+    name: traefik_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16 # not so important what these are
+          gateway: 172.24.0.1 # as long as they're unique on your system
+
+volumes:
+  traefik-config:
+    name: traefik-config
+  portainer-data:
+    name: portainer-data
+  letsencrypt:
+    name: letsencrypt
