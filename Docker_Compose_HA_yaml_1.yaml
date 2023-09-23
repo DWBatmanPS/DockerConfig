@@ -20,7 +20,7 @@ services:
             #- "traefik.http.routers.ha-internal.rule=Host(`ha.${INTERNAL_DOMAIN}`)"
             #- "traefik.http.routers.ha-internal.entrypoints=web"
             #- "traefik.http.routers.ha-insecure.rule=Host(`ha.${EXTERNAL_DOMAIN}`)"
-            $- "traefik.http.routers.ha-insecure.entrypoints=web"
+            #- "traefik.http.routers.ha-insecure.entrypoints=web"
             #- "traefik.http.routers.ha-insecure.middlewares=redirecthttps@file,riptp@file"
             -"traffic.http.routers.homeassistant.tls=true"
             - "traefik.http.routers.homeassistant.rule=Host(`ha.${EXTERNAL_DOMAIN}`)"
