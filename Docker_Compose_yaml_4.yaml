@@ -1,6 +1,6 @@
-version: '2.4'
+version: '3'
 
-services:
+services
     reverse-proxy:
         container_name: reverse-proxy
         # The official v2.10 Traefik docker image
