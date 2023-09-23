@@ -47,9 +47,6 @@ services:
     logging:
       options:
         max-size: 10m
-    volumes:
-      letsencrypt:
-        name: letsencrypt
   portainer:
     container_name: portainer
     image: portainer/portainer-ce:latest
@@ -68,9 +65,6 @@ services:
     logging:
       options:
         max-size: 10m
-    volumes:
-      portainer-data:
-        name: portainer-data
 
 networks:
   host_applications:
