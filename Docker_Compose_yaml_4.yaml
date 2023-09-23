@@ -51,7 +51,6 @@ services:
         volumes:
           letsencrypt:
           name: letsencrypt
-          driver: local-persist
           driver_opts:
              mountpoint: "${PERSIST_DATA_PATH}/data/letsencrypt"
     portainer:
@@ -75,7 +74,6 @@ services:
         volumes:
           portainer-data:
           name: portainer-data
-          driver: local-persist
           driver_opts:
              mountpoint: "${PERSIST_DATA_PATH}/data/portainer-data"
 networks:
@@ -96,16 +94,13 @@ networks:
 volumes:
     traefik-config:
         name: traefik-config
-        driver: local-persist
         driver_opts:
             mountpoint: "${PERSIST_DATA_PATH}/data/traefik-config"
     portainer-data:
         name: portainer-data
-        driver: local-persist
         driver_opts:
             mountpoint: "${PERSIST_DATA_PATH}/data/portainer-data"
     letsencrypt:
         name: letsencrypt
-        driver: local-persist
         driver_opts:
             mountpoint: "${PERSIST_DATA_PATH}/data/letsencrypt"
